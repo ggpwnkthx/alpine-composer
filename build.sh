@@ -1,0 +1,101 @@
+#!/bin/sh
+
+DIR="$( cd "$( dirname "$0" )" > /dev/null && pwd )"
+PROFILE=aldoqe		# Profile to build
+WORK_DIR=$DIR/work	# Directory to work in
+ISO_DIR=$DIR/iso	# Directory to put the final ISO in
+VERSION=edge		# Options: edge, latest-stable, v3.9, ..., v2.4
+ARCH=x86_64			# Options: x86_64, x86, ppc64le, s390x, aarch64, armhf, armv7
+
+# Make sure we have everything we need to build
+repo_version=$(cat /etc/alpine-release | head -n 1 | awk -F. '{print "v"$1"."$2}')
+if [ "$repo_version" == "v." ] ; then
+	repo_version="edge"
+fi
+branches="main community"
+if [ "$repo_version" == "edge" ] ; then
+	branches="$branches testing"
+fi
+#if [ "$VERSION" != "$repo_version" ] ; then
+#	repo_version="$repo_version $VERSION"
+#fi
+for repo in $repo_version; do
+	for branch in $branches; do
+		if [ -z "$(cat /etc/apk/repositories | grep $repo/$branch)" ] ; then
+			echo "http://dl-cdn.alpinelinux.org/alpine/$repo/$branch" >> /etc/apk/repositories
+		else
+			sed -i "/$repo\/$branch/s/^#//g" /etc/apk/repositories
+		fi
+	done
+done
+apk update
+requirements="alpine-sdk build-base apk-tools alpine-conf busybox fakeroot syslinux xorriso squashfs-tools mtools dosfstools grub-efi git shadow"
+for app in $requirements ; do
+	if [ -z "$updated" ] ; then
+		apk update
+		updated=1
+	fi
+	if [ -z "$(apk info -e $app)" ] ; then
+		apk add $app
+	fi
+done
+
+# Add ourselves to the abuild group
+if [ -z "$(cat /etc/group | grep abuild: | grep $USER)" ] ; then
+	if [ "$(cat /etc/group | grep abuild: | tail -c 2)" == ":" ] ; then
+		sed -i -e "s/^abuild:.*/&$USER/" /etc/group
+	else
+		sed -i -e "s/^abuild:.*/&,$USER/" /etc/group
+	fi
+fi
+
+# Create a key if necessary
+if [ -z "$(ls /etc/apk/keys/ | grep $USER-.*.rsa.pub)" ] ; then	
+	abuild-keygen -i -a -q -n
+fi
+
+# Download the aports from Alpine
+if [ ! -d aports ] ; then
+	git clone git://git.alpinelinux.org/aports
+	if [ -z "$updated" ] ; then
+		apk update
+		updated=1
+	fi
+fi
+
+# Move the customs scripts to aports/scripts
+if [ -d scripts ] ; then
+	chmod -R 0755 scripts
+	cp -u scripts/* aports/scripts
+fi
+
+#rm -rf $WORK_DIR/apkr*
+#rm -rf $WORK_DIR/apko*
+#rm -rf $WORK_DIR/ima*
+#rm -rf $WORK_DIR/sys*
+#rm -rf $WORK_DIR/gru*
+
+returnto=$(pwd)
+cd aports/scripts
+
+make_cmd="./mkimage.sh \
+	--tag $VERSION \
+	--arch $ARCH \
+	--repository http://dl-cdn.alpinelinux.org/alpine/$VERSION/main \
+	--repository http://dl-cdn.alpinelinux.org/alpine/$VERSION/community \
+	--profile $PROFILE \
+	--outdir $ISO_DIR/ \
+	--workdir $WORK_DIR"
+if [ "$VERSION" == "edge" ] ; then 
+	make_cmd="$make_cmd \
+	--repository http://dl-cdn.alpinelinux.org/alpine/$VERSION/testing"
+fi
+
+if [ -z "$(id -Gn | grep abuild)" ]
+then
+	sg abuild -c "$make_cmd"
+else
+	$make_cmd
+fi
+
+cd $returnto
