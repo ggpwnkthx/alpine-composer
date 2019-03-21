@@ -7,5 +7,5 @@ For the most part, assume this must be run on Alpine Linux. You can either boot 
 ## One-liner Setup
 
 ```
-git clone https://github.com/ggpwnkthx/alpine-composer.git && alpine-composer/build.sh
+git clone https://github.com/ggpwnkthx/alpine-composer.git && cd alpine-composer && ./build.sh
 ```
