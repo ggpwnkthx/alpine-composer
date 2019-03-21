@@ -1,11 +1,15 @@
 #!/bin/sh
 
+# DON'T CHANGE
+returnto=$(pwd)
 DIR="$( cd "$( dirname "$0" )" > /dev/null && pwd )"
+
+# CHANGE THESE
 PROFILE=aldoqe		# Profile to build
-WORK_DIR=$DIR/work	# Directory to work in
-ISO_DIR=$DIR/iso	# Directory to put the final ISO in
 VERSION=edge		# Options: edge, latest-stable, v3.9, ..., v2.4
 ARCH=x86_64			# Options: x86_64, x86, ppc64le, s390x, aarch64, armhf, armv7
+WORK_DIR=$DIR/work	# Directory to work in
+ISO_DIR=$DIR/iso	# Directory to put the final ISO in
 
 # Make sure we have everything we need to build
 repo_version=$(cat /etc/alpine-release | head -n 1 | awk -F. '{print "v"$1"."$2}')
@@ -64,10 +68,8 @@ if [ ! -d aports ] ; then
 fi
 
 # Move the customs scripts to aports/scripts
-if [ -d scripts ] ; then
-	chmod -R 0755 scripts
-	cp -u scripts/* aports/scripts
-fi
+chmod -R 0755 scripts
+cp scripts/* aports/scripts
 
 #rm -rf $WORK_DIR/apkr*
 #rm -rf $WORK_DIR/apko*
@@ -75,8 +77,7 @@ fi
 #rm -rf $WORK_DIR/sys*
 #rm -rf $WORK_DIR/gru*
 
-returnto=$(pwd)
-cd aports/scripts
+cd $DIR/aports/scripts
 
 make_cmd="./mkimage.sh \
 	--tag $VERSION \
