@@ -5,7 +5,7 @@ returnto=$(pwd)
 DIR="$( cd "$( dirname "$0" )" > /dev/null && pwd )"
 
 # CHANGE THESE
-PROFILE=aldoqe		# Profile to build
+PROFILE=EXAMPLE		# Profile to build
 VERSION=edge		# Options: edge, latest-stable, v3.9, ..., v2.4
 ARCH=x86_64			# Options: x86_64, x86, ppc64le, s390x, aarch64, armhf, armv7
 WORK_DIR=$DIR/work	# Directory to work in
@@ -67,18 +67,14 @@ if [ ! -d aports ] ; then
 	fi
 fi
 
-# Move the customs scripts to aports/scripts
+# Copy the customs scripts to aports/scripts
 chmod -R 0755 scripts
 cp scripts/* aports/scripts
 
-#rm -rf $WORK_DIR/apkr*
-#rm -rf $WORK_DIR/apko*
-#rm -rf $WORK_DIR/ima*
-#rm -rf $WORK_DIR/sys*
-#rm -rf $WORK_DIR/gru*
-
+# Move to the aports/scripts directory
 cd $DIR/aports/scripts
 
+# Establish the command to be run
 make_cmd="./mkimage.sh \
 	--tag $VERSION \
 	--arch $ARCH \
@@ -92,6 +88,7 @@ if [ "$VERSION" == "edge" ] ; then
 	--repository http://dl-cdn.alpinelinux.org/alpine/$VERSION/testing"
 fi
 
+# Run the command
 if [ -z "$(id -Gn | grep abuild)" ]
 then
 	sg abuild -c "$make_cmd"
@@ -99,4 +96,5 @@ else
 	$make_cmd
 fi
 
+# Return to the directory we started from
 cd $returnto

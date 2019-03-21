@@ -1,0 +1,37 @@
+profile_EXAMPLE() {
+	# Metadata
+	title="EXAMPLE Linux"
+	desc="EXAMPLE Linux, just enough to get you started."
+	profile_abbrev="EXAMPLE"
+	
+	# Include build profiles
+	profile_abstract	# Abstracted base profile for all supported architectures.
+	
+	# Add APKs
+	apks="$apks nginx"
+	
+	# Process overlays
+	apkovl="$apkovl genapkovl-EXAMPLE.sh"
+	
+	# Overlay hostname
+	hostname="localhost"
+	
+	# GRUB (For booting with EFI)
+	grub_mod="$grub_mod "
+	
+	# SYSLINUX (For booting with Legacy BIOS)
+	syslinux_serial="$syslinux_serial "
+	
+	# Kernel 
+	kernel_addons="$kernel_addons "
+	kernel_flavors="$kernel_flavors "
+	kernel_cmdline="$kernel_cmdline "
+	
+	# InitFS
+	initfs_features="$initfs_features "
+	initfs_cmdline="$initfs_cmdline "
+	
+	# Outputs
+	image_ext="iso"
+	output_format="iso"
+}
