@@ -4,16 +4,21 @@
 
 For the most part, assume this must be run on Alpine Linux. You can either boot a VM with the alpine-standard image, or it can be run inside an Alpine container
 
+### Running from Live ISO
+If you are going to run this from a a live ISO, keep in mind that you will need twice as much RAM as your expected build size since the tmpfs will be running from RAM.
+
 ## Setup
 
 ### One-liner
 This will clone this repo and run the build script with default values.
 ```
-git clone https://github.com/ggpwnkthx/alpine-composer.git && cd alpine-composer && ./build.sh
+wget https://github.com/ggpwnkthx/alpine-composer/archive/master.zip && unzip master.zip && cd alpine-composer-master && ./build.sh
 ```
 
-### build.sh
+## build.sh
 The build script has a few variable that can be changed to suite your needs.
+
+### Variables
 
 #### PROFILE
 This is the profile that the mkimage platform will start from.
