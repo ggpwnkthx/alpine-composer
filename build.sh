@@ -12,7 +12,7 @@ WORK_DIR=$DIR/work		# Directory to work in
 ISO_DIR=$DIR/work/iso	# Directory to put the final ISO in
 
 # Make sure we have everything we need to build (unless we're in a container, then assume we do)
-if [ ! -z "$(grep 'docker\|lxc' /proc/1/cgroup)" ] ; then
+if [ -z "$(grep 'docker\|lxc' /proc/1/cgroup)" ] ; then
 	repo_version=$(cat /etc/alpine-release | head -n 1 | awk -F. '{print "v"$1"."$2}')
 	if [ "$repo_version" == "v." ] ; then
 		repo_version="edge"
