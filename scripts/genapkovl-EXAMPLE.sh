@@ -10,7 +10,7 @@ This is the content of the file /test.txt
 EOF
 
 # You must create a directory if it doesn't already exist in the overlay (even if it does exist in the rootfs)
-mkdir -p /var/www/html
+mkdir -p "$tmp"/var/www/html
 makefile root:root 0644 "$tmp"/var/www/html/index.html << EOF
 <html>
   <head>
