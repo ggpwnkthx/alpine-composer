@@ -9,10 +9,7 @@ PROFILE=EXAMPLE			# Profile to build
 VERSION=edge			# Options: edge, latest-stable, v3.9, ..., v2.4
 ARCH=x86_64				# Options: x86_64, x86, ppc64le, s390x, aarch64, armhf, armv7
 WORK_DIR=$DIR/work		# Directory to work in
-ISO_DIR=$DIR/work/iso	# Directory to put the final ISO in
-
-echo " >>> $USER"
-echo "$(grep 'docker\|lxc' /proc/1/cgroup)"
+ISO_DIR=$DIR/iso		# Directory to put the final ISO in
 
 # Make sure we have everything we need to build (unless we're in a container, then assume we do)
 if [ -z "$(grep 'docker\|lxc' /proc/1/cgroup)" ] ; then
