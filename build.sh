@@ -13,6 +13,13 @@ ISO_DIR=$DIR/iso		# Directory to put the final ISO in
 
 # Make sure we have everything we need to build (unless we're in a container, then assume we do)
 if [ -z "$(grep 'docker\|lxc' /proc/1/cgroup)" ] ; then
+	# If we docker is installed use it instead of building locally to establish consistency
+	if [ ! -z "$(command -v docker)" ] ; then
+		echo Building with docker ...
+		./docker-build.sh
+		exit 0
+	fi
+	
 	repo_version=$(cat /etc/alpine-release | head -n 1 | awk -F. '{print "v"$1"."$2}')
 	if [ "$repo_version" == "v." ] ; then
 		repo_version="edge"
@@ -52,20 +59,19 @@ if [ -z "$(grep 'docker\|lxc' /proc/1/cgroup)" ] ; then
 			sed -i -e "s/^abuild:.*/&,$USER/" /etc/group
 		fi
 	fi
+fi
 
-	# Download the aports from Alpine
-	clone=0
-	if [ ! -d $DIR/aports ] ; then
+# Download the aports from Alpine
+clone=0
+if [ ! -d $DIR/aports ] ; then
+	clone=1
+else
+	if [ -z "$(ls $DIR/aports)" ] ; then
 		clone=1
-	else
-		if [ -z "$(ls $DIR/aports)" ] ; then
-			clone=1
-		fi
 	fi
-	if [ $clone == 1 ] ; then
-		git clone git://git.alpinelinux.org/aports
-	fi
-
+fi
+if [ $clone == 1 ] ; then
+	git clone git://git.alpinelinux.org/aports
 fi
 
 # Copy the customs scripts to aports/scripts
