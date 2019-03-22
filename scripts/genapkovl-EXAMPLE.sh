@@ -51,6 +51,7 @@ cp -r beginner-html-site-styled "$tmp"/var/www/html
 # Adding packages that should be included when the system is booted
 # Be sure you also have these listed in the apks variable in the profile
 apk_add nginx
+rc_add nginx default
 
 
 # Repackage the overlay file
