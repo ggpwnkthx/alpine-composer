@@ -11,6 +11,8 @@ ARCH=x86_64					# Options: x86_64, x86, ppc64le, s390x, aarch64, armhf, armv7
 WORK_DIR=$DIR/aports/work	# Directory to work in
 ISO_DIR=$DIR/aports/iso		# Directory to put the final ISO in
 
+echo " >>> $USER"
+
 # Make sure we have everything we need to build
 repo_version=$(cat /etc/alpine-release | head -n 1 | awk -F. '{print "v"$1"."$2}')
 if [ "$repo_version" == "v." ] ; then
