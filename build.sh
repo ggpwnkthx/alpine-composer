@@ -63,12 +63,20 @@ if [ ! -z "$USER" ] ; then
 fi
 
 # Download the aports from Alpine
-if [ ! -d aports ] ; then
-	git clone git://git.alpinelinux.org/aports
-	if [ -z "$updated" ] ; then
-		apk update 2>/dev/null
-		updated=1
+clone=0
+if [ ! -d $DIR/aports ] ; then
+	clone=1
+else
+	if [ ! -z "$(ls $DIR/aports)" ] ; then
+		clone=1
 	fi
+fi
+if [ $clone == 1 ] ; then
+	git clone git://git.alpinelinux.org/aports
+fi
+if [ -z "$updated" ] ; then
+	apk update 2>/dev/null
+	updated=1
 fi
 
 # Copy the customs scripts to aports/scripts
