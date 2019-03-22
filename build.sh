@@ -5,11 +5,11 @@ returnto=$(pwd)
 DIR="$( cd "$( dirname "$0" )" > /dev/null && pwd )"
 
 # CHANGE THESE
-PROFILE=EXAMPLE		# Profile to build
-VERSION=edge		# Options: edge, latest-stable, v3.9, ..., v2.4
-ARCH=x86_64			# Options: x86_64, x86, ppc64le, s390x, aarch64, armhf, armv7
-WORK_DIR=$DIR/work	# Directory to work in
-ISO_DIR=$DIR/iso	# Directory to put the final ISO in
+PROFILE=EXAMPLE				# Profile to build
+VERSION=edge				# Options: edge, latest-stable, v3.9, ..., v2.4
+ARCH=x86_64					# Options: x86_64, x86, ppc64le, s390x, aarch64, armhf, armv7
+WORK_DIR=$DIR/aports/work	# Directory to work in
+ISO_DIR=$DIR/aports/iso		# Directory to put the final ISO in
 
 # Make sure we have everything we need to build
 repo_version=$(cat /etc/alpine-release | head -n 1 | awk -F. '{print "v"$1"."$2}')
@@ -32,11 +32,10 @@ for repo in $repo_version; do
 		fi
 	done
 done
-apk update
 requirements="alpine-sdk build-base apk-tools alpine-conf busybox fakeroot syslinux xorriso squashfs-tools mtools dosfstools grub-efi git shadow"
 for app in $requirements ; do
 	if [ -z "$updated" ] ; then
-		apk update
+		apk update 2>/dev/null
 		updated=1
 	fi
 	if [ -z "$(apk info -e $app)" ] ; then
@@ -62,7 +61,7 @@ fi
 if [ ! -d aports ] ; then
 	git clone git://git.alpinelinux.org/aports
 	if [ -z "$updated" ] ; then
-		apk update
+		apk update 2>/dev/null
 		updated=1
 	fi
 fi
