@@ -74,7 +74,7 @@ fi
 
 # Copy the customs scripts to aports/scripts
 chmod -R 0755 scripts
-cp $DIR/scripts/* $DIR/aports/scripts
+cp -f $DIR/scripts/* $DIR/aports/scripts
 
 # Move to the aports/scripts directory
 cd $DIR/aports/scripts
