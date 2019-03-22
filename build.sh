@@ -66,10 +66,11 @@ if [ -z "$(grep 'docker\|lxc' /proc/1/cgroup)" ] ; then
 		git clone git://git.alpinelinux.org/aports
 	fi
 
-	# Copy the customs scripts to aports/scripts
-	chmod -R 0755 scripts
-	cp -f $DIR/scripts/* $DIR/aports/scripts
 fi
+
+# Copy the customs scripts to aports/scripts
+chmod -R 0755 scripts
+cp -f $DIR/scripts/* $DIR/aports/scripts
 
 # Create a key if necessary
 if [ -z "$(ls /etc/apk/keys/ | grep $USER-.*.rsa.pub)" ] ; then	
