@@ -1,11 +1,12 @@
 profile_EXAMPLE() {
+	# Include build profiles
+	# These will be compiled in order
+	profile_abstract	# Abstracted base profile for all supported architectures.
+	
 	# Metadata
 	title="EXAMPLE Linux"
 	desc="EXAMPLE Linux, just enough to get you started."
 	profile_abbrev="EXAMPLE"
-	
-	# Include build profiles
-	profile_abstract	# Abstracted base profile for all supported architectures.
 	
 	# Add APKs
 	apks="$apks nginx"

@@ -11,9 +11,6 @@ ARCH=x86_64					# Options: x86_64, x86, ppc64le, s390x, aarch64, armhf, armv7
 WORK_DIR=$DIR/aports/work	# Directory to work in
 ISO_DIR=$DIR/aports/iso		# Directory to put the final ISO in
 
-echo " <<< Will return to: $returnto"
-echo " >>> Changing to: $DIR"
-
 # Make sure we have everything we need to build
 repo_version=$(cat /etc/alpine-release | head -n 1 | awk -F. '{print "v"$1"."$2}')
 if [ "$repo_version" == "v." ] ; then
@@ -74,14 +71,10 @@ fi
 if [ $clone == 1 ] ; then
 	git clone git://git.alpinelinux.org/aports
 fi
-if [ -z "$updated" ] ; then
-	apk update 2>/dev/null
-	updated=1
-fi
 
 # Copy the customs scripts to aports/scripts
 chmod -R 0755 scripts
-cp scripts/* aports/scripts
+cp $DIR/scripts/* $DIR/aports/scripts
 
 # Move to the aports/scripts directory
 cd $DIR/aports/scripts
