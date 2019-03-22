@@ -1,0 +1,8 @@
+version: '3.1'
+
+services:
+  alpine-composer:
+    image: alpine-composer
+    build: .
+    volumes:
+      - ./:/alpine-composer
