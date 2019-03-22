@@ -67,7 +67,7 @@ clone=0
 if [ ! -d $DIR/aports ] ; then
 	clone=1
 else
-	if [ ! -z "$(ls $DIR/aports)" ] ; then
+	if [ -z "$(ls $DIR/aports)" ] ; then
 		clone=1
 	fi
 fi
