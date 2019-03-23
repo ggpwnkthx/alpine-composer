@@ -14,6 +14,10 @@ Frankly, this is not an ideal way to use this. I would highly recommend using a 
 ### One-liner
 This will clone this repo and run the build script with default values.
 ```
+git clone https://github.com/ggpwnkthx/alpine-composer.git && cd alpine-composer && ./build.sh
+```
+Or if you don't have git:
+```
 wget https://github.com/ggpwnkthx/alpine-composer/archive/master.zip && unzip master.zip && cd alpine-composer-master && ./build.sh
 ```
 If docker is installed, it will automatically use a docker container to run the build process.
