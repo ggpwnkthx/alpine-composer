@@ -2,7 +2,7 @@
 
 ## Requirements
 
-For the most part, assume this must be run on Alpine Linux. You can either boot a VM with the alpine-standard image, or it can be run inside an Alpine container
+For the most part, assume this must be run on Alpine Linux. You can either boot a VM with the alpine-standard image, or it can be run inside an Alpine container. If you have docker already installed, the one-liner script will automatically detect it and build your image using a docker container.
 
 ### Running from a Live ISO
 If you are going to run this from a a live ISO, keep in mind that you will need three times as much RAM as your expected build size since the tmpfs will be running from RAM. You will need a bare minimum of 4GB of RAM.
@@ -16,6 +16,7 @@ This will clone this repo and run the build script with default values.
 ```
 wget https://github.com/ggpwnkthx/alpine-composer/archive/master.zip && unzip master.zip && cd alpine-composer-master && ./build.sh
 ```
+If docker is installed, it will automatically use a docker container to run the build process.
 
 ## build.sh
 
