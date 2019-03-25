@@ -1,7 +1,5 @@
 #!/bin/sh -e
 
-rm -rf /tmp/*
-
 # Get shared functions and unpack any existing overlays
 source $(dirname $0)/shared_functions.sh
 

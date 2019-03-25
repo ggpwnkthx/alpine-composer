@@ -60,19 +60,7 @@ if [ -z "$(grep 'docker\|lxc' /proc/1/cgroup)" ] ; then
 			sed -i -e "s/^abuild:.*/&,$USER/" /etc/group
 		fi
 	fi
-fi
-
-# Download the aports from Alpine
-clone=0
-if [ ! -d $DIR/aports ] ; then
-	clone=1
-else
-	if [ -z "$(ls $DIR/aports)" ] ; then
-		clone=1
-	fi
-fi
-if [ $clone == 1 ] ; then
-	git clone git://git.alpinelinux.org/aports
+	
 fi
 
 # Copy the customs scripts to aports/scripts
