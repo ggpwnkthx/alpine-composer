@@ -103,8 +103,8 @@ apk_add apache2
 rc_add apache2 default
 
 # Allow search permission from / (required for apache)
-chmod 755 "$tmp"/
-chmod -R 755 "$tmp"/var/www
+chmod o+x "$tmp"/
+chmod -R o+x "$tmp"/var/www
 
 # Repackage the overlay file
 overlay_repack
