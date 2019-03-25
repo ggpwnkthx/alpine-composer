@@ -16,6 +16,7 @@ if [ -z "$(grep 'docker\|lxc' /proc/1/cgroup)" ] ; then
 	# If we docker is installed use it instead of building locally to establish consistency
 	if [ ! -z "$(command -v docker)" ] ; then
 		echo Building with docker ...
+		
 		./docker-build.sh
 		exit 0
 	fi
@@ -79,12 +80,25 @@ chmod -R 0755 scripts
 cp -f $DIR/scripts/* $DIR/aports/scripts
 
 # Create a key if necessary
+if [ -d $DIR/keys ] ; then
+	if [ ! -d /root/.abuild ] ; then
+		mkdir -p /root/.abuild
+	fi
+	cp -r $DIR/keys/* /root/.abuild/
+	cp /root/.abuild/*.pub /etc/apk/keys/
+else
+	mkdir -p $DIR/keys
+fi	
 if [ -z "$(ls /etc/apk/keys/ | grep $USER-.*.rsa.pub)" ] ; then	
 	abuild-keygen -i -a -q -n
+	cp -r /root/.abuild/* $DIR/keys/
 fi
 
 # Move to the aports/scripts directory
 cd $DIR/aports/scripts
+
+# Clean up previous builds
+rm -f *.apkovl.tar.gz
 
 # Establish the command to be run
 make_cmd="./mkimage.sh \

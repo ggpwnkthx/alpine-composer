@@ -94,60 +94,17 @@ www_path=/var/www
 git clone https://github.com/mdn/beginner-html-site-styled.git
 cp -r beginner-html-site-styled "$tmp""$www_path"
 
-# We'll use nginx as the service provider
+# We'll use apache2 as the service provider
 # Adding packages that should be included when the system is booted
 # Be sure you also have these listed in the apks variable in the profile
-apk_add nginx
+apk_add apache2
 
 # We should make sure it starts at the correct runlevel
-rc_add nginx default
+rc_add apache2 default
 
-# We should give nginx a simple config file
-# Note: We need to use the escape chacater \ when ever there is a $
-mkdir -p "$tmp"/etc/nginx/
-makefile root:root 0644 "$tmp"/etc/nginx/nginx.conf << EOF
-user  nginx;
-worker_processes  1;
-
-error_log  /var/log/nginx/error.log warn;
-pid        /var/run/nginx.pid;
-
-events {
-    worker_connections  1024;
-}
-
-http {
-    include       /etc/nginx/mime.types;
-    default_type  application/octet-stream;
-
-    log_format  main  '\$remote_addr - \$remote_user [$time_local] "\$request" '
-                      '\$status \$body_bytes_sent "\$http_referer" '
-                      '"\$http_user_agent" "\$http_x_forwarded_for"';
-
-    access_log  /var/log/nginx/access.log  main;
-    sendfile        on;
-    keepalive_timeout  65;
-
-    include /etc/nginx/conf.d/*.conf;
-}
-EOF
-
-# Let's make sure its configured to look in our $www_path directory for it's default site
-mkdir -p "$tmp"/etc/nginx/conf.d
-makefile root:root 0644 "$tmp"/etc/nginx/conf.d/default.conf << EOF
-server {
-    listen         80 default_server;
-    server_name    example.com www.example.com;
-    root           $www_path/beginner-html-site-styled;
-    index          index.html;
-    try_files \$uri /index.html;
-}
-EOF
-
-# Let's make sure the nginx user can access the files we want
-# Note: In this case the user id for nginx is 101 and the group id for nginx is 102
-chown -R 101:102 "$tmp""$www_path"
-chmod -R 0755 "$tmp""$www_path"
+# Allow search permission from / (required for apache)
+chmod 755 "$tmp"/
+chmod -R 755 "$tmp"/var/www
 
 # Repackage the overlay file
 overlay_repack

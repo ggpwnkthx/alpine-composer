@@ -9,13 +9,13 @@ profile_EXAMPLE() {
 	profile_abbrev="EXAMPLE"
 	
 	# Add APKs
-	apks="$apks nginx"
+	apks="$apks apache2"
 	
 	# Process overlays
 	apkovl="$apkovl genapkovl-EXAMPLE.sh"
 	
-	# Overlay hostname
-	hostname="localhost"
+	# Overlay hostname (this is passed to the apkovl scripts as $1)
+	hostname="EXAMPLE"
 	
 	# GRUB (For booting with EFI)
 	grub_mod="$grub_mod "
