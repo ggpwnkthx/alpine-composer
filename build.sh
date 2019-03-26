@@ -13,6 +13,7 @@ ISO_DIR=$DIR/iso		# Directory to put the final ISO in
 
 # Make sure we have everything we need to build (unless we're in a container, then assume we do)
 if [ -z "$(grep 'docker\|lxc' /proc/1/cgroup)" ] ; then
+
 	# If we docker is installed use it instead of building locally to establish consistency
 	if [ ! -z "$(command -v docker)" ] ; then
 		echo Building with docker ...
@@ -21,6 +22,19 @@ if [ -z "$(grep 'docker\|lxc' /proc/1/cgroup)" ] ; then
 		exit 0
 	fi
 	
+	# Make sure we're running on an Alpine distrobution
+	if [ -f /etc/os-release ] ; then
+		source /etc/os-release
+		if [ "$NAME" != "Alpine Linux" ] ; then
+			echo "Alpine Linux (or Docker) is a required."
+			exit 2
+		fi
+	else
+		echo "Alpine Linux (or Docker) is a required."
+		exit 2
+	fi
+	
+	# Set up repositories
 	repo_version=$(cat /etc/alpine-release | head -n 1 | awk -F. '{print "v"$1"."$2}')
 	if [ "$repo_version" == "v." ] ; then
 		repo_version="edge"
@@ -29,9 +43,6 @@ if [ -z "$(grep 'docker\|lxc' /proc/1/cgroup)" ] ; then
 	if [ "$repo_version" == "edge" ] ; then
 		branches="$branches testing"
 	fi
-	#if [ "$VERSION" != "$repo_version" ] ; then
-	#	repo_version="$repo_version $VERSION"
-	#fi
 	for repo in $repo_version; do
 		for branch in $branches; do
 			if [ -z "$(cat /etc/apk/repositories | grep $repo/$branch)" ] ; then
@@ -41,6 +52,8 @@ if [ -z "$(grep 'docker\|lxc' /proc/1/cgroup)" ] ; then
 			fi
 		done
 	done
+	
+	# Install required APKs
 	requirements="alpine-sdk build-base apk-tools alpine-conf busybox fakeroot syslinux xorriso squashfs-tools mtools dosfstools grub-efi git shadow"
 	for app in $requirements ; do
 		if [ -z "$updated" ] ; then
