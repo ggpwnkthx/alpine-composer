@@ -16,7 +16,10 @@ Or if you don't have git:
 ```
 wget https://github.com/ggpwnkthx/alpine-composer/archive/master.zip && unzip master.zip && cd alpine-composer-master && ./build.sh
 ```
+### Docker
 If docker is installed, it will automatically use a docker container to run the build process.
+
+The build script should be compeltely cross-platform compatible so long as docker is available.
 ## build.sh
 ### Usage
 TODO: Add input arguments instead of relying on 
@@ -40,4 +43,9 @@ When using the "abstract" profile, the output file is determined by the architec
 The filename for all profiles must be prefixed with "mkimage." and have the file extension ".sh" or they will not be recognized. For example, the correct filename format is: mkimage.profilename.sh
 
 Although not a hard requirement, any overlay scripts should be prefixed with "genapkovl-" for consistency.
-
+### EXAMPLE
+The EXAMPLE profile is set as the default in the build.sh file.
+#### mkimage.EXAMPLE.sh
+This profile starts off by using the "abstract" profile, which just makes things a little bit easier when trying to build for multiple architechtures. It then sets some basic meta-data, adds the apache2 apk, defines the overlay script, and then keeps everything else default - but exposes the variables so you can see what is available for tweaking.
+#### genapkovl-EXAMPLE.sh
+The comments in the example overlay script are fairly descriptive, but in general this script shows you how to make/add files and directories, set permissions. Take a look at the shared_functions.sh script for some functions that are used a lot.
