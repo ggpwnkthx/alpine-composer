@@ -88,22 +88,42 @@ rc_add dhcp-all-interfaces default
 # Let's set up a basic HTML server
 www_path=/var/www
 
-# Let's add some files that we cloned using git
-git clone https://github.com/mdn/beginner-html-site-styled.git
-cp -r beginner-html-site-styled "$tmp""$www_path"
-
-# We'll use apache2 as the service provider
+# We'll use nginx as the service provider
 # Be sure you also have these listed in the "apks" variable in the profile
 # That step does not install the APK to you image. It only adds it to the image's local repo.
 # If you want any APKs isntalled to your image, the following step is REQUIRED.
-apk_add apache2
+apk_add nginx
 
 # We should make sure it starts at the correct runlevel
-rc_add apache2 default
+rc_add nginx default
 
 # Allow search permission from / (required for apache)
 chmod o+x "$tmp"/
 chmod -R o+x "$tmp"/var/www
+
+# Let's add some files that we cloned using git
+git clone https://github.com/mdn/beginner-html-site-styled.git
+cp -r beginner-html-site-styled/* "$tmp""$www_path"/
+
+# Now we just need to add this to configure apache2 to host the files
+mkdir -p "$tmp"/etc/nginx/conf.d
+makefile root:root 0644 "$tmp"/etc/nginx/conf.d/default.conf << EOF
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	
+	root $www_path;
+	
+	index index.html index.htm;
+	
+	server_name _;
+
+	location / {
+		try_files \$uri \$uri/ =404;
+	}
+	
+}
+EOF
 
 # Repackage the overlay file (REQUIRED)
 overlay_repack
