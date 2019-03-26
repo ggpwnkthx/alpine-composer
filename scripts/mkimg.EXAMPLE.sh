@@ -9,7 +9,7 @@ profile_EXAMPLE() {
 	profile_abbrev="EXAMPLE"
 	
 	# Add APKs
-	apks="$apks apache2"
+	apks="$apks nginx"
 	
 	# Process overlays
 	apkovl="$apkovl genapkovl-EXAMPLE.sh"
