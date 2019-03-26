@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-# Get shared functions and unpack any existing overlays
+# Get shared functions and unpack any existing overlays (REQUIRED)
 source $(dirname $0)/shared_functions.sh
 
 # $tmp/ is / in the overlay
@@ -93,8 +93,9 @@ git clone https://github.com/mdn/beginner-html-site-styled.git
 cp -r beginner-html-site-styled "$tmp""$www_path"
 
 # We'll use apache2 as the service provider
-# Adding packages that should be included when the system is booted
-# Be sure you also have these listed in the apks variable in the profile
+# Be sure you also have these listed in the "apks" variable in the profile
+# That step does not install the APK to you image. It only adds it to the image's local repo.
+# If you want any APKs isntalled to your image, the following step is REQUIRED.
 apk_add apache2
 
 # We should make sure it starts at the correct runlevel
@@ -104,5 +105,5 @@ rc_add apache2 default
 chmod o+x "$tmp"/
 chmod -R o+x "$tmp"/var/www
 
-# Repackage the overlay file
+# Repackage the overlay file (REQUIRED)
 overlay_repack
