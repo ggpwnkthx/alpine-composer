@@ -7,7 +7,7 @@ DIR="$( cd "$( dirname "$0" )" > /dev/null && pwd )"
 # CHANGE THESE
 PROFILE=EXAMPLE			# Profile to build
 VERSION=edge			# Options: edge, latest-stable, v3.9, ..., v2.4
-ARCH=x86_64				# Options: x86_64, x86, ppc64le, s390x, aarch64, armhf, armv7
+ARCH=x86_64			# Options: x86_64, x86, ppc64le, s390x, aarch64, armhf, armv7
 WORK_DIR=$DIR/work		# Directory to work in
 ISO_DIR=$DIR/iso		# Directory to put the final ISO in
 
