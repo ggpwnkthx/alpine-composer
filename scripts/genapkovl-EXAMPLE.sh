@@ -105,7 +105,7 @@ chmod -R o+x "$tmp"/var/www
 git clone https://github.com/mdn/beginner-html-site-styled.git
 cp -r beginner-html-site-styled/* "$tmp""$www_path"/
 
-# Now we just need to add this to configure apache2 to host the files
+# Now we just need to add this to configure nginx to host the files
 mkdir -p "$tmp"/etc/nginx/conf.d
 makefile root:root 0644 "$tmp"/etc/nginx/conf.d/default.conf << EOF
 server {
