@@ -36,7 +36,7 @@ if [ -z "$(grep 'docker\|lxc' /proc/1/cgroup)" ] ; then
 	
 	# Set up repositories
 	repo_version=$(cat /etc/alpine-release | head -n 1 | awk -F. '{print "v"$1"."$2}')
-	if [ "$repo_version" == "v." ] ; then
+	if [ ! -z "$(echo $repo_version | grep '_')" ] ; then
 		repo_version="edge"
 	fi
 	branches="main community"
