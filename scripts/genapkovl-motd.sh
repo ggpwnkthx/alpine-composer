@@ -7,7 +7,7 @@ source $(dirname $0)/shared_functions.sh
 makefile root:root 0644 "$tmp"/etc/motd <<EOF
 Welcome to Alpine!
 
-You can install to a disk with the command: install-os
+You can install to a disk with the command: install-disk
 
 You may change this message by editing /etc/motd.
 
